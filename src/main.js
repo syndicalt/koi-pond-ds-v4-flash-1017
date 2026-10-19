@@ -259,7 +259,10 @@ function frame(now) {
   const time = clock.elapsed;
 
   if (!reducedMotion && !view.dragging && now - lastInteraction > 9000) {
-    view.targetYaw += dt * 0.018;
+    // A slow sway around the default heading, clamped to the arc the tree line
+    // is composed for, so the view never wanders off the designed framing.
+    const sway = Math.sin(time * 0.045) * 0.32;
+    view.targetYaw = clamp(-0.55 + sway, -1.35, 0.25);
   }
   easeView(dt);
 
